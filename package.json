@@ -1,0 +1,37 @@
+{
+  "name": "microcms-ts-client",
+  "version": "0.1.0",
+  "description": "",
+  "main": "./dist/index.cjs.js",
+  "module": "./dist/index.esm.js",
+  "types": "./dist/index.d.ts",
+  "files": [
+    "/dist"
+  ],
+  "scripts": {
+    "build": "run-p build:*",
+    "build:esbuild": "ts-node build.ts",
+    "build:types": "tsc --declaration --emitDeclarationOnly --declarationDir './dist'"
+  },
+  "keywords": [
+    "microcms",
+    "typescript"
+  ],
+  "devDependencies": {
+    "@types/node": "^18.11.9",
+    "esbuild": "^0.15.14",
+    "npm-run-all": "^4.1.5",
+    "ts-node": "^10.9.1",
+    "typescript": "^4.8.4"
+  },
+  "author": "hanetsuki<me@tsuki-lab.net>",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tsuki-lab/microcms-ts-client.git"
+  },
+  "bugs": {
+    "url": "https://github.com/tsuki-lab/microcms-ts-client/issues"
+  },
+  "homepage": "https://github.com/tsuki-lab/microcms-ts-client#readme"
+}
