@@ -5,7 +5,7 @@ const entryFile = 'src/index.ts'
 const shared = {
   bundle: true,
   entryPoints: [entryFile],
-  external: Object.keys(dependencies),
+  external: Object.keys(dependencies || {}),
   logLevel: 'info',
   minify: true,
   sourcemap: false,
