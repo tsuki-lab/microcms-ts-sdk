@@ -2,16 +2,23 @@ import {
   createClient as _createClient,
   MicroCMSClient,
   MicroCMSDate,
-  MicroCMSListResponse,
-  WriteApiRequestResult
-} from 'microcms-js-sdk';
-import { EndPoints, GetListQueries, GetQueries } from './types';
+  MicroCMSListContent,
+  WriteApiRequestResult,
+  EndPoints,
+  GetListQueries,
+  GetListResponse,
+  GetObjectQueries,
+  GetQueries
+} from './types';
 import { queryParser } from './utils';
 
 export const createClient = <T extends EndPoints>(clientArg: MicroCMSClient) => {
   const _client = _createClient(clientArg);
 
-  const getListDetail = <E extends keyof T['list'], F extends keyof T['list'][E]>({
+  const getListDetail = <
+    E extends keyof T['list'],
+    F extends keyof T['list'][E] & MicroCMSListContent
+  >({
     endpoint,
     contentId,
     queries = {}
@@ -19,22 +26,22 @@ export const createClient = <T extends EndPoints>(clientArg: MicroCMSClient) => 
     endpoint: E;
     contentId: string;
     queries?: GetQueries<F>;
-  }): Promise<Pick<T[E], F>> => {
-    return _client.getListDetail<Pick<T[E], F>>({
+  }): Promise<Pick<T['list'][E] & MicroCMSListContent, F>> => {
+    return _client.getListDetail<Pick<T['list'][E] & MicroCMSListContent, F>>({
       endpoint: String(endpoint),
       contentId,
       queries: queryParser(queries)
     });
   };
 
-  const getList = <E extends keyof T['list'], F extends keyof T['list'][E]>({
+  const getList = <E extends keyof T['list'], F extends keyof T['list'][E] & MicroCMSListContent>({
     endpoint,
     queries = {}
   }: {
     endpoint: E;
     queries?: GetListQueries<F>;
-  }): Promise<MicroCMSListResponse<Pick<T[E], F>>> => {
-    return _client.getList<Pick<T[E], F>>({
+  }): Promise<GetListResponse<T['list'][E] & MicroCMSListContent, F>> => {
+    return _client.getList<Pick<T['list'][E] & MicroCMSListContent, F>>({
       endpoint: String(endpoint),
       queries: queryParser(queries)
     });
@@ -45,15 +52,15 @@ export const createClient = <T extends EndPoints>(clientArg: MicroCMSClient) => 
     queries = {}
   }: {
     endpoint: E;
-    queries?: GetListQueries<F>;
-  }): Promise<Pick<T[E] & MicroCMSDate, F>> => {
-    return _client.getObject<Pick<T[E] & MicroCMSDate, F>>({
+    queries?: GetObjectQueries<F>;
+  }): Promise<Pick<T['object'][E] & MicroCMSDate, F>> => {
+    return _client.getObject<Pick<T['object'][E] & MicroCMSDate, F>>({
       endpoint: String(endpoint),
       queries: queryParser(queries)
     });
   };
 
-  const getAll = <E extends keyof T['list'], F extends keyof T['list'][E]>({
+  const getAll = <E extends keyof T['list'], F extends keyof T['list'][E] & MicroCMSListContent>({
     endpoint,
     queries = {}
   }: {
@@ -64,7 +71,7 @@ export const createClient = <T extends EndPoints>(clientArg: MicroCMSClient) => 
     const handler = async (
       offset = 0,
       limit = LIMIT
-    ): Promise<MicroCMSListResponse<Pick<T[E], F>>> => {
+    ): Promise<GetListResponse<T['list'][E] & MicroCMSListContent, F>> => {
       const data = await getList({
         endpoint,
         queries: {
