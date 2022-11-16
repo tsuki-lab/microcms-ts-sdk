@@ -10,8 +10,10 @@ module.exports = {
     ecmaVersion: 'latest',
     sourceType: 'module'
   },
-  plugins: ['@typescript-eslint'],
+  plugins: ['@typescript-eslint', 'prettier'],
   rules: {
-    semi: ['error', 'always']
+    'prettier/prettier': ['error'],
+    semi: ['off'],
+    indent: ['off']
   }
 };
