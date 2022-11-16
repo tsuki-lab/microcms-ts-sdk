@@ -13,10 +13,11 @@ jobs:
       - uses: actions/setup-node@v3
         with:
           node-version-file: ./.node-version
+          registry-url: https://registry.npmjs.org/
           cache: 'pnpm'
       - run: |
           pnpm install --frozen-lockfile
           pnpm build
-          pnpm publish --no-git-checks
+          npm publish --access public
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_AUTH_TOKEN }}
