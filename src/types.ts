@@ -1,9 +1,8 @@
 export {
-  createClient,
   MicroCMSClient,
-  MicroCMSDate,
   MicroCMSListContent,
-  WriteApiRequestResult
+  WriteApiRequestResult,
+  MicroCMSObjectContent
 } from 'microcms-js-sdk';
 
 type depthNumber = 1 | 2 | 3;
