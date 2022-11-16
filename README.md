@@ -1,9 +1,19 @@
-# microcms-ts-client
+# microcms-ts-sdk
 
-## Usage
+## Getting Started
+
+### Install
+
+```shell
+npm i microcms-ts-sdk
+# or
+yarn add microcms-ts-sdk
+```
+
+### Usage
 
 ```ts
-import { createClient } from 'microcms-ts-client';
+import { createClient, MicroCMSListContent, MicroCMSObjectContent } from 'microcms-ts-sdk';
 
 // https://yyyyyyyy.microcms.io/api/v1/
 const client = createClient<Endpoints>({
@@ -13,10 +23,10 @@ const client = createClient<Endpoints>({
 
 type Endpoints = {
   list: {
-    blog: Blog;
+    blog: Blog & MicroCMSListContent;
   };
   object: {
-    setting: Setting;
+    setting: Setting & MicroCMSObjectContent;
   };
 };
 
@@ -30,11 +40,40 @@ type Setting = {
 };
 ```
 
+#### Fetch data
+
 ```ts
 // microcms "list" API contents
 client.getList({ endpoint: 'hoge' }); // Error
 client.getList({ endpoint: 'setting' }); // Error
 client.getList({ endpoint: 'blog' }); // Type safe argument "blog"
+
+// microcms "list" API content by contentId
+client.getListDetail({ endpoint: 'blog', contentId: 'xxxxxxxx' });
+
+// microcms "list" API all contents
+client.getAll({ endpoint: 'blog' });
+
+// microcms "object" API content
+client.getObject({ endpoint: 'hoge' }); // Error
+client.getObject({ endpoint: 'blog' }); // Error
+client.getObject({ endpoint: 'setting' }); // Type safe argument "setting"
+```
+
+#### Write data
+
+```ts
+// microcms "list" API contents// Create content
+client
+  .create({
+    endpoint: 'blog',
+    content: {
+      title: 'title',
+      body: 'body'
+    }
+  })
+  .then((res) => console.log(res.id))
+  .catch((err) => console.error(err));
 
 // microcms "list" API content by contentId
 client.getListDetail({ endpoint: 'blog', contentId: 'xxxxxxxx' });
