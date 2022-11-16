@@ -1,6 +1,6 @@
 {
   "name": "microcms-ts-client",
-  "version": "0.1.0-beta",
+  "version": "0.1.0-beta.2",
   "description": "",
   "main": "./dist/index.cjs.js",
   "module": "./dist/index.esm.js",
