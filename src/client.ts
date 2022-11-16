@@ -32,7 +32,7 @@ export const createClient = <T extends EndPoints>(clientArg: MicroCMSClient) => 
     queries = {}
   }: {
     endpoint: E;
-    queries: GetListQueries<F>;
+    queries?: GetListQueries<F>;
   }): Promise<MicroCMSListResponse<Pick<T[E], F>>> => {
     return _client.getList<Pick<T[E], F>>({
       endpoint: String(endpoint),
@@ -45,7 +45,7 @@ export const createClient = <T extends EndPoints>(clientArg: MicroCMSClient) => 
     queries = {}
   }: {
     endpoint: E;
-    queries: GetListQueries<F>;
+    queries?: GetListQueries<F>;
   }): Promise<Pick<T[E] & MicroCMSDate, F>> => {
     return _client.getObject<Pick<T[E] & MicroCMSDate, F>>({
       endpoint: String(endpoint),
@@ -58,7 +58,7 @@ export const createClient = <T extends EndPoints>(clientArg: MicroCMSClient) => 
     queries = {}
   }: {
     endpoint: E;
-    queries: GetListQueries<F>;
+    queries?: GetListQueries<F>;
   }) => {
     const LIMIT = 1;
     const handler = async (
