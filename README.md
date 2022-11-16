@@ -13,7 +13,7 @@ yarn add microcms-ts-sdk
 ### Usage
 
 ```ts
-import { createClient, MicroCMSListContent, MicroCMSObjectContent } from 'microcms-ts-sdk';
+import { createClient } from 'microcms-ts-sdk';
 
 // https://yyyyyyyy.microcms.io/api/v1/
 const client = createClient<Endpoints>({
@@ -23,10 +23,10 @@ const client = createClient<Endpoints>({
 
 type Endpoints = {
   list: {
-    blog: Blog & MicroCMSListContent;
+    blog: Blog;
   };
   object: {
-    setting: Setting & MicroCMSObjectContent;
+    setting: Setting;
   };
 };
 
