@@ -1,79 +1,19 @@
-import {
-  createClient as _createClient,
-  MicroCMSListContent,
-  MicroCMSObjectContent
-} from 'microcms-js-sdk';
-import {
-  MicroCMSClient,
-  WriteApiRequestResult,
-  ClientEndPoints,
-  GetListResponse,
-  GetListDetailResponse,
-  GetListRequest,
-  GetObjectRequest,
-  DeleteRequest,
-  UpdateRequest,
-  CreateRequest,
-  GetListObjectResponse,
-  GetListDetailRequest
-} from './types';
-import { queryParser } from './utils';
+import { createClient as _createClient, MicroCMSClient } from 'microcms-js-sdk';
+import { ClientEndPoints, ExtendedMicroCMSClient, GetListRequest, GetListResponse } from './types';
 
-export const createClient = <T extends ClientEndPoints>(clientArg: MicroCMSClient) => {
-  const _client = _createClient(clientArg);
-
-  const getListDetail = <
-    E extends keyof T['list'],
-    C extends T['list'][E] & MicroCMSListContent,
-    F extends keyof C
-  >({
-    endpoint,
-    queries = {},
-    ...arg
-  }: GetListDetailRequest<T, E, C, F>): Promise<GetListDetailResponse<C, F>> => {
-    return _client.getListDetail({
-      endpoint: String(endpoint),
-      queries: queryParser(queries),
-      ...arg
-    });
-  };
-
-  const getList = <
-    E extends keyof T['list'],
-    C extends T['list'][E] & MicroCMSListContent,
-    F extends keyof C
-  >({
-    endpoint,
-    queries = {},
-    ...arg
-  }: GetListRequest<T, E, C, F>): Promise<GetListResponse<C, F>> => {
-    return _client.getList({
-      endpoint: String(endpoint),
-      queries: queryParser(queries),
-      ...arg
-    });
-  };
-
-  const getAll = <
-    E extends keyof T['list'],
-    C extends T['list'][E] & MicroCMSListContent,
-    F extends keyof C
-  >({
-    endpoint,
-    queries = {},
-    ...arg
-  }: GetListRequest<T, E, C, F>) => {
+export const createClient = <T extends ClientEndPoints>(
+  clientArg: MicroCMSClient
+): ExtendedMicroCMSClient<T> => ({
+  ..._createClient(clientArg),
+  // eslint-disable-next-line space-before-function-paren
+  async getAll<R extends GetListRequest<T>>(request: R) {
     const LIMIT = 1;
-    const handler = async (offset = 0, limit = LIMIT): Promise<GetListResponse<C, F>> => {
-      const data = await getList<E, C, F>({
-        endpoint,
-        queries: {
-          ...queries,
-          offset,
-          limit
-        },
-        ...arg
-      });
+    const handler = async (offset = 0, limit = LIMIT): Promise<GetListResponse<T, R>> => {
+      const data = await this.getList<R>(
+        Object.assign({}, request, {
+          queries: Object.assign({}, request.queries, { offset, limit })
+        })
+      );
 
       if (data.offset + data?.limit >= data.totalCount) return data;
 
@@ -88,62 +28,5 @@ export const createClient = <T extends ClientEndPoints>(clientArg: MicroCMSClien
     };
 
     return handler();
-  };
-
-  const getObject = <
-    E extends keyof T['object'],
-    C extends T['object'][E] & MicroCMSObjectContent,
-    F extends keyof C
-  >({
-    endpoint,
-    queries = {},
-    ...arg
-  }: GetObjectRequest<T, E, C, F>): Promise<GetListObjectResponse<C, F>> => {
-    return _client.getObject({
-      endpoint: String(endpoint),
-      queries: queryParser(queries),
-      ...arg
-    });
-  };
-
-  const create = <E extends keyof T['list']>({
-    endpoint,
-    content,
-    ...arg
-  }: CreateRequest<E, T['list'][E]>): Promise<WriteApiRequestResult> => {
-    return _client.create({
-      endpoint: String(endpoint),
-      content: content as Record<number | string, any>,
-      ...arg
-    });
-  };
-
-  const update = ({
-    endpoint,
-    content,
-    ...arg
-  }: UpdateRequest<T, keyof T['list'], keyof T['object']>): Promise<WriteApiRequestResult> => {
-    return _client.update({
-      endpoint: String(endpoint),
-      content: content as Record<number | string, any>,
-      ...arg
-    });
-  };
-
-  const _delete = ({ endpoint, ...arg }: DeleteRequest<keyof T['list']>): Promise<void> => {
-    return _client.delete({
-      endpoint: String(endpoint),
-      ...arg
-    });
-  };
-
-  return {
-    getListDetail,
-    getList,
-    getObject,
-    getAll,
-    create,
-    update,
-    delete: _delete
-  };
-};
+  }
+});
