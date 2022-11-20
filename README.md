@@ -51,6 +51,7 @@ const client = createClient<Endpoints>({
 ```
 
 It is also possible to use only type definitions for the original client.
+(Unsupported `getAll` method)
 
 ```ts
 import { createClient } from 'microcms-js-sdk';
@@ -117,6 +118,15 @@ client.getList({
   queries: {
     fields: ['id', 'text', 'publishedAt'] // (keyof (Content & MicroCMSListContent))[]
   }
+});
+```
+
+Support for all acquisitions.
+
+```ts
+/** Get all contents for endpoint */
+client.getAll({
+  endpoint: 'contents'
 });
 ```
 
