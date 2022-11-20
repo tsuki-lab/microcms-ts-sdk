@@ -4,18 +4,18 @@ type Content = {
   text: string;
 };
 
-interface Endpoints {
+type Endpoints = {
   list: {
     contents: Content;
   };
   object: {
     content: Content;
   };
-}
+};
 
 const client = createClient<Endpoints>({
-  serviceDomain: '',
-  apiKey: ''
+  serviceDomain: 'YOUR_DOMAIN',
+  apiKey: 'YOUR_API_KEY'
 });
 
 client
@@ -35,7 +35,7 @@ client
       fields: ['id', 'text', 'publishedAt']
     }
   })
-  .then((res) => res);
+  .then((res) => res.contents[0]);
 
 client
   .getAll({
