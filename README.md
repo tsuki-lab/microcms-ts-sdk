@@ -20,13 +20,13 @@ yarn add microcms-ts-sdk
 ### How to use
 
 Supported of "microcms-js-sdk".<br />
-Please read the instructions on how to use the support destination.
-
-https://github.com/microcmsio/microcms-js-sdk#how-to-use
+For more information on how to use this service, please click [here](https://github.com/microcmsio/microcms-js-sdk#how-to-use).
 
 ### Type safe usage
 
 ```ts
+import { createClient } from 'microcms-ts-sdk';
+
 // Type definition
 type Content = {
   text: string;
@@ -46,6 +46,23 @@ interface Endpoints {
 // Initialize Client SDK.
 const client = createClient<Endpoints>({
   serviceDomain: 'YOUR_DOMAIN', // YOUR_DOMAIN is the XXXX part of XXXX.microcms.io
+  apiKey: 'YOUR_API_KEY'
+});
+```
+
+It is also possible to use only type definitions for the original client.
+(Unsupported `getAll` method)
+
+```ts
+import { createClient } from 'microcms-js-sdk';
+import { MicroCMSClient } from 'microcms-ts-sdk';
+
+type Endpoints = {
+  // definition
+};
+
+const client: MicroCMSClient<Endpoints> = createClient({
+  serviceDomain: 'YOUR_DOMAIN',
   apiKey: 'YOUR_API_KEY'
 });
 ```
@@ -101,6 +118,15 @@ client.getList({
   queries: {
     fields: ['id', 'text', 'publishedAt'] // (keyof (Content & MicroCMSListContent))[]
   }
+});
+```
+
+Support for all acquisitions.
+
+```ts
+/** Get all contents for endpoint */
+client.getAll({
+  endpoint: 'contents'
 });
 ```
 
