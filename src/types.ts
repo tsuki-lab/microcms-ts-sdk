@@ -68,8 +68,8 @@ export interface GetListRequest<T extends ClientEndPoints> extends _GetListReque
 
 /** getList response type */
 export interface GetListResponse<T extends ClientEndPoints, R extends GetListRequest<T>>
-  extends MicroCMSListResponse<unknown> {
-  contents: (ResolveContentType<T, 'list', R> & MicroCMSListContent)[];
+  extends Omit<MicroCMSListResponse<unknown>, 'contents'> {
+  contents: ResolveContentType<T, 'list', R>[];
 }
 
 /** getObject queries type */
