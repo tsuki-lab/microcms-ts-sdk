@@ -1,14 +1,21 @@
-import { createClient as _createClient, MicroCMSClient } from 'microcms-js-sdk';
-import { ClientEndPoints, ExtendedMicroCMSClient, GetListRequest, GetListResponse } from './types';
+import {
+  createClient as createClientOrigin,
+  MicroCMSClient as MicroCMSClientParams
+} from 'microcms-js-sdk';
+import {
+  ClientEndPoints,
+  MicroCMSTsClient,
+  MicroCMSGetListRequest,
+  MicroCMSGetListResponse
+} from './types';
 
 export const createClient = <T extends ClientEndPoints>(
-  clientArg: MicroCMSClient
-): ExtendedMicroCMSClient<T> => ({
-  ..._createClient(clientArg),
-  // eslint-disable-next-line space-before-function-paren
-  async getAll<R extends GetListRequest<T>>(request: R) {
-    const LIMIT = 1;
-    const handler = async (offset = 0, limit = LIMIT): Promise<GetListResponse<T, R>> => {
+  clientArg: MicroCMSClientParams
+): MicroCMSTsClient<T> => ({
+  ...createClientOrigin(clientArg),
+  getAll<R extends MicroCMSGetListRequest<T>>(request: R) {
+    const LIMIT = 1000;
+    const handler = async (offset = 0, limit = LIMIT): Promise<MicroCMSGetListResponse<T, R>> => {
       const data = await this.getList<R>(
         Object.assign({}, request, {
           queries: Object.assign({}, request.queries, { offset, limit })

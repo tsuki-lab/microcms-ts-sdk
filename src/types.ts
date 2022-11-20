@@ -35,7 +35,7 @@ type ResolveContentType<
   : T;
 
 /** getListDetail queries type */
-export interface GetListDetailQueries<E>
+export interface MicroCMSGetListDetailQueries<E>
   extends Omit<
     MicroCMSQueries,
     'fields' | 'limit' | 'offset' | 'orders' | 'q' | 'ids' | 'filters'
@@ -44,36 +44,39 @@ export interface GetListDetailQueries<E>
 }
 
 /** getListDetail request type */
-export interface GetListDetailRequest<T extends ClientEndPoints> extends _GetListDetailRequest {
+export interface MicroCMSGetListDetailRequest<T extends ClientEndPoints>
+  extends _GetListDetailRequest {
   endpoint: Extract<keyof T['list'], string>;
-  queries?: GetListDetailQueries<T['list'][this['endpoint']]>;
+  queries?: MicroCMSGetListDetailQueries<T['list'][this['endpoint']]>;
 }
 
 /** getListDetail response type */
-export type GetListDetailResponse<
+export type MicroCMSGetListDetailResponse<
   T extends ClientEndPoints,
-  R extends GetListDetailRequest<T>
+  R extends MicroCMSGetListDetailRequest<T>
 > = ResolveContentType<T, 'list', R>;
 
 /** getList queries type */
-export interface GetListQueries<E> extends MicroCMSQueries {
+export interface MicroCMSGetListQueries<E> extends MicroCMSQueries {
   fields?: Extract<keyof E | keyof MicroCMSListContent, string>[];
 }
 
 /** getList request type */
-export interface GetListRequest<T extends ClientEndPoints> extends _GetListRequest {
+export interface MicroCMSGetListRequest<T extends ClientEndPoints> extends _GetListRequest {
   endpoint: Extract<keyof T['list'], string>;
-  queries?: GetListQueries<T['list'][this['endpoint']]>;
+  queries?: MicroCMSGetListQueries<T['list'][this['endpoint']]>;
 }
 
 /** getList response type */
-export interface GetListResponse<T extends ClientEndPoints, R extends GetListRequest<T>>
-  extends MicroCMSListResponse<unknown> {
-  contents: (ResolveContentType<T, 'list', R> & MicroCMSListContent)[];
+export interface MicroCMSGetListResponse<
+  T extends ClientEndPoints,
+  R extends MicroCMSGetListRequest<T>
+> extends Omit<MicroCMSListResponse<unknown>, 'contents'> {
+  contents: ResolveContentType<T, 'list', R>[];
 }
 
 /** getObject queries type */
-export interface GetObjectQueries<E>
+export interface MicroCMSGetObjectQueries<E>
   extends Omit<
     MicroCMSQueries,
     'fields' | 'limit' | 'offset' | 'orders' | 'q' | 'ids' | 'filters'
@@ -82,15 +85,15 @@ export interface GetObjectQueries<E>
 }
 
 /** getObject queries type */
-export interface GetObjectRequest<T extends ClientEndPoints> extends _GetObjectRequest {
+export interface MicroCMSGetObjectRequest<T extends ClientEndPoints> extends _GetObjectRequest {
   endpoint: Extract<keyof T['object'], string>;
-  queries?: GetObjectQueries<T['object'][this['endpoint']]>;
+  queries?: MicroCMSGetObjectQueries<T['object'][this['endpoint']]>;
 }
 
 /** getObject response type */
-export type GetListObjectResponse<
+export type MicroCMSGetListObjectResponse<
   T extends ClientEndPoints,
-  R extends GetObjectRequest<T>
+  R extends MicroCMSGetObjectRequest<T>
 > = ResolveContentType<T, 'object', R>;
 
 /** create and update result type */
@@ -103,13 +106,13 @@ export interface CreateRequest<T extends ClientEndPoints>
   content: (T['list'] & T['object'])[this['endpoint']] & Record<string, any>;
 }
 
-interface UpdateListRequest<T extends ClientEndPoints> extends _UpdateRequest<unknown> {
+export interface UpdateListRequest<T extends ClientEndPoints> extends _UpdateRequest<unknown> {
   endpoint: Extract<keyof T['list'], string>;
   contentId: string;
   content: Partial<T['list'][this['endpoint']]>;
 }
 
-interface UpdateObjectRequest<T extends ClientEndPoints> extends _UpdateRequest<unknown> {
+export interface UpdateObjectRequest<T extends ClientEndPoints> extends _UpdateRequest<unknown> {
   endpoint: Extract<keyof T['object'], string>;
   content: Partial<T['object'][this['endpoint']]>;
 }
@@ -124,19 +127,19 @@ export interface DeleteRequest<T extends ClientEndPoints> extends _DeleteRequest
   endpoint: Extract<keyof T['list'] | keyof T['object'], string>;
 }
 
-interface MicroCMSClient<T extends ClientEndPoints> {
-  getListDetail<R extends GetListDetailRequest<T>>(
+export interface MicroCMSClient<T extends ClientEndPoints> {
+  getListDetail<R extends MicroCMSGetListDetailRequest<T>>(
     request: R
-  ): Promise<GetListDetailResponse<T, R>>;
-  getList<R extends GetListRequest<T>>(request: R): Promise<GetListResponse<T, R>>;
-  getObject<R extends GetObjectRequest<T>>(request: R): Promise<GetListObjectResponse<T, R>>;
+  ): Promise<MicroCMSGetListDetailResponse<T, R>>;
+  getList<R extends MicroCMSGetListRequest<T>>(request: R): Promise<MicroCMSGetListResponse<T, R>>;
+  getObject<R extends MicroCMSGetObjectRequest<T>>(
+    request: R
+  ): Promise<MicroCMSGetListObjectResponse<T, R>>;
   create<R extends CreateRequest<T>>(request: R): Promise<WriteApiRequestResult>;
   update<R extends UpdateRequest<T>>(request: R): Promise<WriteApiRequestResult>;
   delete<R extends DeleteRequest<T>>(request: R): Promise<void>;
 }
 
-export interface ExtendedMicroCMSClient<T extends ClientEndPoints> extends MicroCMSClient<T> {
-  getAll<R extends GetListRequest<T>>(request: R): Promise<GetListResponse<T, R>>;
+export interface MicroCMSTsClient<T extends ClientEndPoints> extends MicroCMSClient<T> {
+  getAll<R extends MicroCMSGetListRequest<T>>(request: R): Promise<MicroCMSGetListResponse<T, R>>;
 }
-
-export { MicroCMSClient };

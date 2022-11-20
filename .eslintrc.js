@@ -14,6 +14,14 @@ module.exports = {
   rules: {
     'prettier/prettier': ['error'],
     semi: ['off'],
-    indent: ['off']
+    indent: ['off'],
+    'space-before-function-paren': [
+      'error',
+      {
+        anonymous: 'always',
+        named: 'never',
+        asyncArrow: 'always'
+      }
+    ]
   }
 };
