@@ -32,7 +32,7 @@ type ResolveContentType<
   };
 }
   ? Pick<C, F>
-  : T;
+  : C;
 
 /** getListDetail queries type */
 export interface MicroCMSGetListDetailQueries<E>
