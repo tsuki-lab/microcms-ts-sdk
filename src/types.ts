@@ -11,6 +11,7 @@ import {
   UpdateRequest as _UpdateRequest,
   DeleteRequest as _DeleteRequest
 } from 'microcms-js-sdk';
+import { createClient } from './client';
 
 export type ClientEndPoints = {
   list?: {
@@ -143,3 +144,16 @@ export interface MicroCMSClient<T extends ClientEndPoints> {
 export interface MicroCMSTsClient<T extends ClientEndPoints> extends MicroCMSClient<T> {
   getAll<R extends MicroCMSGetListRequest<T>>(request: R): Promise<MicroCMSGetListResponse<T, R>>;
 }
+type ExceptEndpoints<T> = T extends MicroCMSTsClient<infer U> ? U : unknown;
+
+export type MicroCMSSchemaInfer<T extends ReturnType<typeof createClient>> = {
+  [K in Parameters<T['getList']>[0]['endpoint']]: MicroCMSGetListDetailResponse<
+    ExceptEndpoints<T>,
+    { endpoint: K; contentId: string }
+  >;
+} & {
+  [K in Parameters<T['getObject']>[0]['endpoint']]: MicroCMSGetObjectResponse<
+    ExceptEndpoints<T>,
+    { endpoint: K }
+  >;
+};

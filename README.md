@@ -25,7 +25,7 @@ For more information on how to use this service, please click [here](https://git
 ### Type safe usage
 
 ```ts
-import { createClient } from 'microcms-ts-sdk';
+import { createClient, MicroCMSSchemaInfer } from 'microcms-ts-sdk';
 
 // Type definition
 type Content = {
@@ -48,6 +48,29 @@ const client = createClient<Endpoints>({
   serviceDomain: 'YOUR_DOMAIN', // YOUR_DOMAIN is the XXXX part of XXXX.microcms.io
   apiKey: 'YOUR_API_KEY'
 });
+
+// Schema type inference
+type Schema = MicroCMSSchemaInfer<typeof client>;
+/**
+ * Schema[contents]
+ * {
+ *   id: string;
+ *   createdAt: string;
+ *   updatedAt: string;
+ *   publishedAt?: string;
+ *   revisedAt?: string;
+ *   text: string;
+ * }
+ *
+ * Schema[content]
+ * {
+ *   createdAt: string;
+ *   updatedAt: string;
+ *   publishedAt?: string;
+ *   revisedAt?: string;
+ *   text: string;
+ * }
+ */
 ```
 
 It is also possible to use only type definitions for the original client.
