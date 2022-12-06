@@ -91,7 +91,7 @@ export interface MicroCMSGetObjectRequest<T extends ClientEndPoints> extends _Ge
 }
 
 /** getObject response type */
-export type MicroCMSGetListObjectResponse<
+export type MicroCMSGetObjectResponse<
   T extends ClientEndPoints,
   R extends MicroCMSGetObjectRequest<T>
 > = ResolveContentType<T, 'object', R>;
@@ -134,7 +134,7 @@ export interface MicroCMSClient<T extends ClientEndPoints> {
   getList<R extends MicroCMSGetListRequest<T>>(request: R): Promise<MicroCMSGetListResponse<T, R>>;
   getObject<R extends MicroCMSGetObjectRequest<T>>(
     request: R
-  ): Promise<MicroCMSGetListObjectResponse<T, R>>;
+  ): Promise<MicroCMSGetObjectResponse<T, R>>;
   create<R extends CreateRequest<T>>(request: R): Promise<WriteApiRequestResult>;
   update<R extends UpdateRequest<T>>(request: R): Promise<WriteApiRequestResult>;
   delete<R extends DeleteRequest<T>>(request: R): Promise<void>;
