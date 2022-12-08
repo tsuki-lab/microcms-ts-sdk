@@ -1,4 +1,5 @@
 import {
+  MicroCMSContentId,
   MicroCMSListContent,
   MicroCMSObjectContent,
   MicroCMSListResponse,
@@ -11,6 +12,7 @@ import {
   UpdateRequest as _UpdateRequest,
   DeleteRequest as _DeleteRequest
 } from 'microcms-js-sdk';
+import { DecrementNum } from './type-utils';
 import { createClient } from './client';
 
 export type ClientEndPoints = {
@@ -22,18 +24,50 @@ export type ClientEndPoints = {
   };
 };
 
+/** adapted reference fields */
+export type MicroCMSReference<T> = T & MicroCMSContentId;
+
+// default depth = 1
+// https://document.microcms.io/content-api/get-list-contents#h30fce9c966
+type ResolveDepthResponse<
+  T extends Exclude<object, null>,
+  D extends number = 1
+> = MicroCMSContentId & {
+  [K in keyof T]: T[K] extends infer Prop
+    ? Prop extends MicroCMSReference<infer R>
+      ? D extends 0
+        ? MicroCMSReference<{}>
+        : ResolveDepthResponse<NonNullable<R>, DecrementNum<D>>
+      : Prop extends MicroCMSReference<infer R>[]
+      ? D extends 0
+        ? MicroCMSReference<{}>[]
+        : ResolveDepthResponse<NonNullable<R>, DecrementNum<D>>[]
+      : Prop
+    : never;
+};
+
+type ResolveDepthQuery<R, C extends Exclude<object, null>> = R extends {
+  queries: {
+    depth: infer D extends NonNullable<MicroCMSQueries['depth']>;
+  };
+}
+  ? ResolveDepthResponse<C, D>
+  : ResolveDepthResponse<C>;
+
 type ResolveContentType<
   T extends ClientEndPoints,
   I extends keyof ClientEndPoints,
   R extends { endpoint: keyof T[I] },
-  C = T[I][R['endpoint']] & (I extends 'list' ? MicroCMSListContent : MicroCMSObjectContent)
+  C extends Exclude<object, null> = T[I][R['endpoint']] &
+    (I extends 'list' ? MicroCMSListContent : MicroCMSObjectContent)
 > = R extends {
   queries: {
     fields: (infer F extends keyof C)[];
   };
 }
-  ? Pick<C, F>
-  : C;
+  ? ResolveDepthQuery<R, Pick<C, F>>
+  : ResolveDepthQuery<R, C>;
+
 
 /** getListDetail queries type */
 export interface MicroCMSGetListDetailQueries<E>
