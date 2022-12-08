@@ -1,4 +1,5 @@
 import {
+  MicroCMSContentId,
   MicroCMSListContent,
   MicroCMSObjectContent,
   MicroCMSListResponse,
@@ -11,6 +12,7 @@ import {
   UpdateRequest as _UpdateRequest,
   DeleteRequest as _DeleteRequest
 } from 'microcms-js-sdk';
+import { DecrementNum } from './type-utils';
 import { createClient } from './client';
 
 export type ClientEndPoints = {
@@ -22,6 +24,33 @@ export type ClientEndPoints = {
   };
 };
 
+/** adapted relation fields */
+export type MicroCMSRelation<T> = T & MicroCMSContentId;
+
+// default depth = 1
+// https://document.microcms.io/content-api/get-list-contents#h30fce9c966
+type ResolveDepthResponse<T, D extends number = 1> = MicroCMSContentId & {
+  [K in keyof T]: T[K] extends infer Prop
+    ? Prop extends MicroCMSRelation<infer R>
+      ? D extends 0
+        ? MicroCMSRelation<{}>
+        : ResolveDepthResponse<NonNullable<R>, DecrementNum<D>>
+      : Prop extends MicroCMSRelation<infer R>[]
+      ? D extends 0
+        ? MicroCMSRelation<{}>[]
+        : ResolveDepthResponse<NonNullable<R>, DecrementNum<D>>[]
+      : Prop
+    : never;
+};
+
+type ResolveDepthQuery<R, C> = R extends {
+  queries: {
+    depth: infer D extends NonNullable<MicroCMSQueries['depth']>;
+  };
+}
+  ? ResolveDepthResponse<C, D>
+  : ResolveDepthResponse<C>;
+
 type ResolveContentType<
   T extends ClientEndPoints,
   I extends keyof ClientEndPoints,
@@ -32,8 +61,18 @@ type ResolveContentType<
     fields: (infer F extends keyof C)[];
   };
 }
-  ? Pick<C, F>
-  : C;
+  ? ResolveDepthQuery<R, Pick<C, F>>
+  : ResolveDepthQuery<R, C>;
+
+type ResolveUpsertRelation<T> = {
+  [K in keyof T]: T[K] extends infer Props
+    ? Props extends MicroCMSRelation<unknown>
+      ? string
+      : Props extends MicroCMSRelation<unknown>[]
+      ? string[]
+      : Props
+    : never;
+};
 
 /** getListDetail queries type */
 export interface MicroCMSGetListDetailQueries<E>
@@ -104,18 +143,18 @@ export type WriteApiRequestResult = _WriteApiRequestResult;
 export interface CreateRequest<T extends ClientEndPoints>
   extends _CreateRequest<Record<string, any>> {
   endpoint: Extract<keyof T['list'] | keyof T['object'], string>;
-  content: (T['list'] & T['object'])[this['endpoint']] & Record<string, any>;
+  content: ResolveUpsertRelation<(T['list'] & T['object'])[this['endpoint']] & Record<string, any>>;
 }
 
 export interface UpdateListRequest<T extends ClientEndPoints> extends _UpdateRequest<unknown> {
   endpoint: Extract<keyof T['list'], string>;
   contentId: string;
-  content: Partial<T['list'][this['endpoint']]>;
+  content: Partial<ResolveUpsertRelation<T['list'][this['endpoint']]>>;
 }
 
 export interface UpdateObjectRequest<T extends ClientEndPoints> extends _UpdateRequest<unknown> {
   endpoint: Extract<keyof T['object'], string>;
-  content: Partial<T['object'][this['endpoint']]>;
+  content: Partial<ResolveUpsertRelation<T['object'][this['endpoint']]>>;
 }
 
 /** update request type */
@@ -157,3 +196,7 @@ export type MicroCMSSchemaInfer<T extends ReturnType<typeof createClient>> = {
     { endpoint: K }
   >;
 };
+
+export type MicroCMSDepthInfer<T, D extends number> = T extends ResolveDepthResponse<infer U>
+  ? ResolveDepthResponse<U, D>
+  : ResolveDepthResponse<T, D>;
