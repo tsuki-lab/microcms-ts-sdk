@@ -29,10 +29,7 @@ export type MicroCMSRelation<T> = T & MicroCMSContentId;
 
 // default depth = 1
 // https://document.microcms.io/content-api/get-list-contents#h30fce9c966
-type ResolveDepthResponse<
-  T extends Exclude<object, null>,
-  D extends number = 1
-> = MicroCMSContentId & {
+type ResolveDepthResponse<T, D extends number = 1> = MicroCMSContentId & {
   [K in keyof T]: T[K] extends infer Prop
     ? Prop extends MicroCMSRelation<infer R>
       ? D extends 0
@@ -46,7 +43,7 @@ type ResolveDepthResponse<
     : never;
 };
 
-type ResolveDepthQuery<R, C extends Exclude<object, null>> = R extends {
+type ResolveDepthQuery<R, C> = R extends {
   queries: {
     depth: infer D extends NonNullable<MicroCMSQueries['depth']>;
   };
@@ -58,8 +55,7 @@ type ResolveContentType<
   T extends ClientEndPoints,
   I extends keyof ClientEndPoints,
   R extends { endpoint: keyof T[I] },
-  C extends Exclude<object, null> = T[I][R['endpoint']] &
-    (I extends 'list' ? MicroCMSListContent : MicroCMSObjectContent)
+  C = T[I][R['endpoint']] & (I extends 'list' ? MicroCMSListContent : MicroCMSObjectContent)
 > = R extends {
   queries: {
     fields: (infer F extends keyof C)[];
@@ -201,9 +197,6 @@ export type MicroCMSSchemaInfer<T extends ReturnType<typeof createClient>> = {
   >;
 };
 
-export type MicroCMSDepthInfer<
-  T extends Exclude<object, null>,
-  D extends number
-> = T extends ResolveDepthResponse<infer U>
+export type MicroCMSDepthInfer<T, D extends number> = T extends ResolveDepthResponse<infer U>
   ? ResolveDepthResponse<U, D>
   : ResolveDepthResponse<T, D>;
