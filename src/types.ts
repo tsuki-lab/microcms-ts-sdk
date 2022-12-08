@@ -202,3 +202,10 @@ export type MicroCMSSchemaInfer<T extends ReturnType<typeof createClient>> = {
     { endpoint: K }
   >;
 };
+
+export type MicroCMSDepthInfer<
+  T extends Exclude<object, null>,
+  D extends number
+> = T extends ResolveDepthResponse<infer U>
+  ? ResolveDepthResponse<U, D>
+  : ResolveDepthResponse<T, D>;
