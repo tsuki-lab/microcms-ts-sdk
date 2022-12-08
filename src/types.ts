@@ -68,6 +68,15 @@ type ResolveContentType<
   ? ResolveDepthQuery<R, Pick<C, F>>
   : ResolveDepthQuery<R, C>;
 
+type ResolveUpsertReference<T> = {
+  [K in keyof T]: T[K] extends infer Props
+    ? Props extends MicroCMSReference<unknown>
+      ? string
+      : Props extends MicroCMSReference<unknown>[]
+      ? string[]
+      : Props
+    : never;
+};
 
 /** getListDetail queries type */
 export interface MicroCMSGetListDetailQueries<E>
@@ -138,18 +147,20 @@ export type WriteApiRequestResult = _WriteApiRequestResult;
 export interface CreateRequest<T extends ClientEndPoints>
   extends _CreateRequest<Record<string, any>> {
   endpoint: Extract<keyof T['list'] | keyof T['object'], string>;
-  content: (T['list'] & T['object'])[this['endpoint']] & Record<string, any>;
+  content: ResolveUpsertReference<
+    (T['list'] & T['object'])[this['endpoint']] & Record<string, any>
+  >;
 }
 
 export interface UpdateListRequest<T extends ClientEndPoints> extends _UpdateRequest<unknown> {
   endpoint: Extract<keyof T['list'], string>;
   contentId: string;
-  content: Partial<T['list'][this['endpoint']]>;
+  content: Partial<ResolveUpsertReference<T['list'][this['endpoint']]>>;
 }
 
 export interface UpdateObjectRequest<T extends ClientEndPoints> extends _UpdateRequest<unknown> {
   endpoint: Extract<keyof T['object'], string>;
-  content: Partial<T['object'][this['endpoint']]>;
+  content: Partial<ResolveUpsertReference<T['object'][this['endpoint']]>>;
 }
 
 /** update request type */
