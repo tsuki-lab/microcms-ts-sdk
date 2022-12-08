@@ -25,19 +25,19 @@ export type ClientEndPoints = {
 };
 
 /** adapted relation fields */
-export type MicroCMSRelation<T> = T & MicroCMSContentId;
+export type MicroCMSRelation<T> = T & MicroCMSListContent;
 
 // default depth = 1
 // https://document.microcms.io/content-api/get-list-contents#h30fce9c966
-type ResolveDepthResponse<T, D extends number = 1> = MicroCMSContentId & {
+type ResolveDepthResponse<T, D extends number = 1> = MicroCMSListContent & {
   [K in keyof T]: T[K] extends infer Prop
     ? Prop extends MicroCMSRelation<infer R>
       ? D extends 0
-        ? MicroCMSRelation<{}>
+        ? MicroCMSContentId
         : ResolveDepthResponse<NonNullable<R>, DecrementNum<D>>
       : Prop extends MicroCMSRelation<infer R>[]
       ? D extends 0
-        ? MicroCMSRelation<{}>[]
+        ? MicroCMSContentId[]
         : ResolveDepthResponse<NonNullable<R>, DecrementNum<D>>[]
       : Prop
     : never;
