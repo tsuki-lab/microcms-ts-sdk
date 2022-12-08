@@ -153,6 +153,128 @@ client.getAll({
 });
 ```
 
+Support relation schema.<br />
+https://document.microcms.io/manual/api-model-settings#h9c184228ff
+
+```ts
+import { MicroCMSRelation } from 'microcms-ts-sdk';
+
+type Writer = {
+  name: string;
+};
+
+type Post = {
+  title: string;
+  writer: MicroCMSRelation<Writer>;
+  relatedPosts: MicroCMSRelation<Post>[];
+};
+
+// endpoint name `posts` API type List for `Post`
+client
+  .getListDetail({
+    endpoint: 'posts',
+    contentId: 'xxxx',
+    queries: {
+      depth: 1 // 1 <= default | https://document.microcms.io/content-api/get-list-contents#h30fce9c966
+    }
+  })
+  .then((res) => console.log(res));
+/**
+ * {
+ *   id: string;
+ *   createdAt: string;
+ *   updatedAt: string;
+ *   publishedAt?: string;
+ *   revisedAt?: string;
+ *   title: string;
+ *   writer: {
+ *     id: string;
+ *     createdAt: string;
+ *     updatedAt: string;
+ *     publishedAt?: string;
+ *     revisedAt?: string;
+ *     name: string;
+ *   }
+ *   relatedPosts: {
+ *     id: string;
+ *     createdAt: string;
+ *     updatedAt: string;
+ *     publishedAt?: string;
+ *     revisedAt?: string;
+ *     title: string;
+ *     writer: {
+ *       id: string;
+ *     }
+ *     relatedPosts: {
+ *       id: string;
+ *     }
+ *   }[]
+ * }
+ */
+
+// get individual schema of depth.
+type MicroCMSSchema = MicroCMSSchemaInfer<typeof client>;
+type PostDetailDepth2 = MicroCMSDepthInfer<MicroCMSSchema['posts'], 2>; // depth: 2
+/**
+ * {
+ *   id: string;
+ *   createdAt: string;
+ *   updatedAt: string;
+ *   publishedAt?: string;
+ *   revisedAt?: string;
+ *   title: string;
+ *   writer: {
+ *     id: string;
+ *     createdAt: string;
+ *     updatedAt: string;
+ *     publishedAt?: string;
+ *     revisedAt?: string;
+ *     name: string;
+ *   }
+ *   relatedPosts: {
+ *     id: string;
+ *     createdAt: string;
+ *     updatedAt: string;
+ *     publishedAt?: string;
+ *     revisedAt?: string;
+ *     title: string;
+ *     writer: {
+ *       id: string;
+ *       createdAt: string;
+ *       updatedAt: string;
+ *       publishedAt?: string;
+ *       revisedAt?: string;
+ *       name: string;
+ *     }
+ *     relatedPosts: {
+ *       id: string;
+ *       createdAt: string;
+ *       updatedAt: string;
+ *       publishedAt?: string;
+ *       revisedAt?: string;
+ *       title: string;
+ *       writer: {
+ *         id: string;
+ *       }
+ *       relatedPosts: {
+ *         id: string;
+ *       }[]
+ *     }[]
+ *   }[]
+ * }
+ */
+
+// microCMS POST method API
+client.create({
+  endpoint: 'posts',
+  content: {
+    title: 'example',
+    writer: '< WRITER_CONTENT_ID >', // type-safe
+    relatedPosts: ['< POST_CONTENT_ID >'] // type-safe
+  }
+});
+```
+
 # LICENSE
 
 Apache-2.0
