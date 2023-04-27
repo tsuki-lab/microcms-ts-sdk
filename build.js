@@ -3,7 +3,7 @@ const { build } = require('esbuild');
 const packageJson = require('./package.json');
 
 // @ts-ignore Checked Object keys
-const dependencies = packageJson.hasOwnProperty.call('dependencies')
+const dependencies = hasOwnProperty.call(packageJson, 'dependencies')
   ? packageJson.dependencies
   : {};
 const entryFile = 'src/index.ts';
