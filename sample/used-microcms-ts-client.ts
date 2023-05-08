@@ -15,7 +15,8 @@ type Endpoints = {
 
 const client = createClient<Endpoints>({
   serviceDomain: 'YOUR_DOMAIN',
-  apiKey: 'YOUR_API_KEY'
+  apiKey: 'YOUR_API_KEY',
+  retry: true
 });
 
 client

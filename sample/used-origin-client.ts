@@ -16,7 +16,8 @@ type Endpoints = {
 
 const client: MicroCMSClient<Endpoints> = createClient({
   serviceDomain: 'YOUR_DOMAIN',
-  apiKey: 'YOUR_API_KEY'
+  apiKey: 'YOUR_API_KEY',
+  retry: true
 });
 
 client
