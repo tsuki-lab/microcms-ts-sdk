@@ -10,7 +10,8 @@ import {
   GetObjectRequest as _GetObjectRequest,
   CreateRequest as _CreateRequest,
   UpdateRequest as _UpdateRequest,
-  DeleteRequest as _DeleteRequest
+  DeleteRequest as _DeleteRequest,
+  GetAllContentIdsRequest as _GetAllContentIdsRequest
 } from 'microcms-js-sdk';
 import { DecrementNum } from './type-utils';
 import { createClient } from './client';
@@ -146,6 +147,13 @@ export interface CreateRequest<T extends ClientEndPoints>
   content: ResolveUpsertRelation<(T['list'] & T['object'])[this['endpoint']] & Record<string, any>>;
 }
 
+/** getAllContentIds request type */
+export interface GetAllContentIdsRequest<T extends ClientEndPoints>
+  extends _GetAllContentIdsRequest {
+  endpoint: Extract<keyof T['list'], string>;
+  alternateField?: Extract<keyof T['list'][this['endpoint']] | keyof MicroCMSListContent, string>;
+}
+
 export interface UpdateListRequest<T extends ClientEndPoints> extends _UpdateRequest<unknown> {
   endpoint: Extract<keyof T['list'], string>;
   contentId: string;
@@ -178,6 +186,7 @@ export interface MicroCMSClient<T extends ClientEndPoints> {
   create<R extends CreateRequest<T>>(request: R): Promise<WriteApiRequestResult>;
   update<R extends UpdateRequest<T>>(request: R): Promise<WriteApiRequestResult>;
   delete<R extends DeleteRequest<T>>(request: R): Promise<void>;
+  getAllContentIds<R extends GetAllContentIdsRequest<T>>(request: R): Promise<string[]>;
 }
 
 export interface MicroCMSTsClient<T extends ClientEndPoints> extends MicroCMSClient<T> {
