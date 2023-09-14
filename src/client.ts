@@ -14,7 +14,7 @@ export const createClient = <T extends ClientEndPoints>(
 ): MicroCMSTsClient<T> => ({
   ...createClientOrigin(clientArg),
   getAll<R extends MicroCMSGetListRequest<T>>(request: R) {
-    const LIMIT = 1000;
+    const LIMIT = 100;
     const handler = async (offset = 0, limit = LIMIT): Promise<MicroCMSGetListResponse<T, R>> => {
       const data = await this.getList<R>(
         Object.assign({}, request, {
