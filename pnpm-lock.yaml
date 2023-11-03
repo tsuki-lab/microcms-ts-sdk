@@ -6,8 +6,8 @@ settings:
 
 dependencies:
   microcms-js-sdk:
-    specifier: ^2.6.1
-    version: 2.6.1
+    specifier: ^2.7.0
+    version: 2.7.0
 
 devDependencies:
   '@typescript-eslint/eslint-plugin':
@@ -1749,8 +1749,8 @@ packages:
     engines: {node: '>= 8'}
     dev: true
 
-  /microcms-js-sdk@2.6.1:
-    resolution: {integrity: sha512-wTAZF6+IeZbF9ZWhxRmCK2+FN5/BGj3YsPRzYSUVNKtgGkFvIiKBfOvESmXfanaGrE21cd92qpvHSUnszWQv7w==}
+  /microcms-js-sdk@2.7.0:
+    resolution: {integrity: sha512-+d95LllQd4Pik5WM4mBf0YB39EpzR34Nl4gOQIDostRJBtS3rg/AgqQ91m08+4j/uxytnP00dnzJKJPu1GnwrA==}
     dependencies:
       async-retry: 1.3.3
       cross-fetch: 3.1.8(encoding@0.1.13)
