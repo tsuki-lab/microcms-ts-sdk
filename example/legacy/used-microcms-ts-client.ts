@@ -1,4 +1,4 @@
-import { createClient } from '../src';
+import { createClient } from '../../src/legacy';
 
 type Content = {
   text: string;

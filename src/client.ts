@@ -1,39 +1,46 @@
 import {
-  createClient as createClientOrigin,
-  MicroCMSClient as MicroCMSClientParams
+  createClient as _createClient,
+  MicroCMSClient,
+  WriteApiRequestResult
 } from 'microcms-js-sdk';
+import { MicroCMSEndpoints } from './types';
 import {
-  ClientEndPoints,
-  MicroCMSTsClient,
-  MicroCMSGetListRequest,
-  MicroCMSGetListResponse
-} from './types';
+  CreateRequest,
+  DeleteRequest,
+  GetAllContentIdsRequest,
+  GetAllContentRequest,
+  GetListDetailRequest,
+  GetListRequest,
+  GetObjectRequest,
+  UpdateRequest
+} from './request';
+import {
+  GetAllContentResponse,
+  GetDetailResponse,
+  GetListResponse,
+  GetObjectResponse
+} from './response';
 
-export const createClient = <T extends ClientEndPoints>(
-  clientArg: MicroCMSClientParams
-): MicroCMSTsClient<T> => ({
-  ...createClientOrigin(clientArg),
-  getAll<R extends MicroCMSGetListRequest<T>>(request: R) {
-    const LIMIT = 100;
-    const handler = async (offset = 0, limit = LIMIT): Promise<MicroCMSGetListResponse<T, R>> => {
-      const data = await this.getList<R>(
-        Object.assign({}, request, {
-          queries: Object.assign({}, request.queries, { offset, limit })
-        })
-      );
+// /////////////////////////////////
+// /////////////////////////////////
+// Client
+// /////////////////////////////////
+// /////////////////////////////////
 
-      if (data.offset + data?.limit >= data.totalCount) return data;
-
-      const result = await handler(data.limit, data.offset + data.limit);
-
-      return {
-        offset: 0,
-        limit: result.totalCount,
-        totalCount: result.totalCount,
-        contents: [...data.contents, ...result.contents]
-      };
-    };
-
-    return handler();
-  }
-});
+/**
+ * Initialize SDK Client
+ */
+export const createClient = <T extends MicroCMSEndpoints>(
+  params: MicroCMSClient
+): {
+  getList<R extends GetListRequest<T>>(request: R): Promise<GetListResponse<T, R>>;
+  getListDetail<R extends GetListDetailRequest<T>>(request: R): Promise<GetDetailResponse<T, R>>;
+  getObject<R extends GetObjectRequest<T>>(request: R): Promise<GetObjectResponse<T, R>>;
+  getAllContentIds<R extends GetAllContentIdsRequest<T>>(request: R): Promise<string[]>;
+  getAllContents<R extends GetAllContentRequest<T>>(
+    request: R
+  ): Promise<GetAllContentResponse<T, R>>;
+  create<R extends CreateRequest<T>>(request: R): Promise<WriteApiRequestResult>;
+  update<R extends UpdateRequest<T>>(request: R): Promise<WriteApiRequestResult>;
+  delete<R extends DeleteRequest<T>>(request: R): Promise<void>;
+} => _createClient(params);

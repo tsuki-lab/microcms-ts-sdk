@@ -1,5 +1,5 @@
 import { createClient } from 'microcms-js-sdk';
-import { MicroCMSClient } from '../src';
+import { MicroCMSClient } from '../../src/legacy';
 
 type Content = {
   text: string;
