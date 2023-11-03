@@ -31,3 +31,20 @@ build({
   outfile: './dist/index.cjs.js',
   target: ['ES6']
 });
+
+// legacy build
+build({
+  ...shared,
+  entryPoints: ['src/legacy/index.ts'],
+  format: 'esm',
+  outfile: './dist/legacy/index.esm.js',
+  target: ['ES6']
+});
+
+build({
+  ...shared,
+  entryPoints: ['src/legacy/index.ts'],
+  format: 'cjs',
+  outfile: './dist/legacy/index.cjs.js',
+  target: ['ES6']
+});
