@@ -61,7 +61,7 @@ const client = createClient<Endpoints>({
     endpoint: 'posts',
     contentId: 'CONTENT_ID',
     queries: {
-      fields: ['relatedArticles', 'category.slug']
+      fields: ['category.slug', 'id']
     }
   });
   type GetRelatedArticlesResult = typeof getRelatedArticlesResult;

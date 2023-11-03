@@ -1,8 +1,18 @@
-import { MicroCMSContentId, MicroCMSListContent, MicroCMSQueries } from 'microcms-js-sdk';
-import { DecrementNum } from './utils';
+import {
+  MicroCMSContentId,
+  MicroCMSListContent,
+  MicroCMSObjectContent,
+  MicroCMSQueries
+} from 'microcms-js-sdk';
+import { DecrementNum, PickByFields } from './utils';
 import { MicroCMSEndpoints, MicroCMSRelation } from './types';
 import { MicroCMSListAPIPropertiesOnly } from './helper';
-import { GetAllContentRequest, GetListRequest, GetObjectRequest } from './request';
+import {
+  GetAllContentRequest,
+  GetListRequest,
+  GetObjectRequest,
+  ResolveQueryFieldsRelation
+} from './request';
 
 type ResolveDepthContent<T, D extends number = 1> = {
   [K in keyof T]: T[K] extends infer Prop
@@ -31,13 +41,16 @@ type GetResponse<
   R extends { endpoint: keyof T },
   C = R['endpoint'] extends keyof MicroCMSListAPIPropertiesOnly<T>
     ? T[R['endpoint']]['contents'][number]
-    : T[R['endpoint']]
+    : T[R['endpoint']],
+  M = R['endpoint'] extends keyof MicroCMSListAPIPropertiesOnly<T>
+    ? MicroCMSListContent
+    : MicroCMSObjectContent
 > = R extends {
   queries: {
-    fields: (infer F extends keyof C)[];
+    fields: (infer F extends Extract<ResolveQueryFieldsRelation<C, M>, string>)[];
   };
 }
-  ? ResolveDepthResponse<R, Pick<C, F>>
+  ? ResolveDepthResponse<R, PickByFields<C, F>>
   : ResolveDepthResponse<R, C>;
 
 // /////////////////////////////////

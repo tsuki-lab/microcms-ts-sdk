@@ -15,7 +15,7 @@ import { MicroCMSEndpoints, MicroCMSListAPI, MicroCMSObjectAPI, MicroCMSRelation
 import { MicroCMSListAPIPropertiesOnly } from './helper';
 
 // NOTE: Depth 1 only
-type ResolveQueryFieldsRelation<T, C> = {
+export type ResolveQueryFieldsRelation<T, C> = {
   [K in keyof T]: T[K] extends infer Prop
     ? Prop extends MicroCMSRelation<infer U>
       ? `${Extract<K, string>}.${Extract<keyof U | keyof C, string>}` | K
