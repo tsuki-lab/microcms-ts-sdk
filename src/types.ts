@@ -1,4 +1,4 @@
-import {
+import type {
   MicroCMSContentId,
   MicroCMSListContent,
   MicroCMSObjectContent,
@@ -13,7 +13,7 @@ import {
   DeleteRequest as _DeleteRequest,
   GetAllContentIdsRequest as _GetAllContentIdsRequest
 } from 'microcms-js-sdk';
-import { DecrementNum } from './type-utils';
+import type { DecrementNum } from './type-utils';
 import { createClient } from './client';
 
 export type ClientEndPoints = {
