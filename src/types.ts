@@ -37,10 +37,10 @@ type ResolveDepthResponse<T, D extends number = 1> = MicroCMSListContent & {
         ? MicroCMSContentId
         : ResolveDepthResponse<NonNullable<R>, DecrementNum<D>>
       : Prop extends MicroCMSRelation<infer R>[]
-      ? D extends 0
-        ? MicroCMSContentId[]
-        : ResolveDepthResponse<NonNullable<R>, DecrementNum<D>>[]
-      : Prop
+        ? D extends 0
+          ? MicroCMSContentId[]
+          : ResolveDepthResponse<NonNullable<R>, DecrementNum<D>>[]
+        : Prop
     : never;
 };
 
@@ -70,8 +70,8 @@ type ResolveUpsertRelation<T> = {
     ? Props extends MicroCMSRelation<unknown>
       ? string
       : Props extends MicroCMSRelation<unknown>[]
-      ? string[]
-      : Props
+        ? string[]
+        : Props
     : never;
 };
 
