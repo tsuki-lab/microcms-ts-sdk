@@ -1,4 +1,4 @@
-import {
+import type {
   MicroCMSContentId,
   MicroCMSListContent,
   MicroCMSObjectContent,
@@ -13,7 +13,7 @@ import {
   DeleteRequest as _DeleteRequest,
   GetAllContentIdsRequest as _GetAllContentIdsRequest
 } from 'microcms-js-sdk';
-import { DecrementNum } from './type-utils';
+import type { DecrementNum } from './type-utils';
 import { createClient } from './client';
 
 export type ClientEndPoints = {
@@ -37,10 +37,10 @@ type ResolveDepthResponse<T, D extends number = 1> = MicroCMSListContent & {
         ? MicroCMSContentId
         : ResolveDepthResponse<NonNullable<R>, DecrementNum<D>>
       : Prop extends MicroCMSRelation<infer R>[]
-      ? D extends 0
-        ? MicroCMSContentId[]
-        : ResolveDepthResponse<NonNullable<R>, DecrementNum<D>>[]
-      : Prop
+        ? D extends 0
+          ? MicroCMSContentId[]
+          : ResolveDepthResponse<NonNullable<R>, DecrementNum<D>>[]
+        : Prop
     : never;
 };
 
@@ -70,8 +70,8 @@ type ResolveUpsertRelation<T> = {
     ? Props extends MicroCMSRelation<unknown>
       ? string
       : Props extends MicroCMSRelation<unknown>[]
-      ? string[]
-      : Props
+        ? string[]
+        : Props
     : never;
 };
 
