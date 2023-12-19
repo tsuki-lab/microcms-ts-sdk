@@ -1,10 +1,12 @@
 {
   "compilerOptions": {
     "target": "ES6",
-    "module": "CommonJS",
+    "module": "ESNext",
+    "moduleResolution": "Bundler",
     "declaration": true,
     "strict": true,
-    "lib": ["ES2020", "dom"]
+    "lib": ["ES2020", "dom"],
+    "verbatimModuleSyntax": true
   },
   "include": ["./src/**/*"],
   "exclude": ["node_modules"]

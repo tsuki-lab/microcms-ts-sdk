@@ -1,8 +1,8 @@
 import {
   createClient as createClientOrigin,
-  MicroCMSClient as MicroCMSClientParams
+  type MicroCMSClient as MicroCMSClientParams
 } from 'microcms-js-sdk';
-import {
+import type {
   ClientEndPoints,
   MicroCMSTsClient,
   MicroCMSGetListRequest,
