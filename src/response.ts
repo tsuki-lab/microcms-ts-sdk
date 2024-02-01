@@ -1,12 +1,12 @@
-import {
+import type {
   MicroCMSContentId,
   MicroCMSListContent,
   MicroCMSObjectContent,
   MicroCMSQueries
 } from 'microcms-js-sdk';
-import { DecrementNum, PickByFields } from './utils';
-import { MicroCMSEndpoints, MicroCMSRelation } from './types';
-import {
+import type { DecrementNum, PickByFields } from './utils';
+import type { MicroCMSEndpoints, MicroCMSRelation } from './types';
+import type {
   GetAllContentRequest,
   GetListDetailRequest,
   GetListRequest,

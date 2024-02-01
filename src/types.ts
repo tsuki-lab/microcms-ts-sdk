@@ -1,4 +1,4 @@
-import { MicroCMSListContent } from 'microcms-js-sdk';
+import type { MicroCMSListContent } from 'microcms-js-sdk';
 
 /** Relation Type */
 export type MicroCMSRelation<T> = T & MicroCMSListContent;

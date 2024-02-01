@@ -1,4 +1,4 @@
-import {
+import type {
   GetListDetailRequest as _GetListDetailRequest,
   GetListRequest as _GetListRequest,
   GetObjectRequest as _GetObjectRequest,
@@ -11,7 +11,7 @@ import {
   MicroCMSListContent,
   MicroCMSObjectContent
 } from 'microcms-js-sdk';
-import { MicroCMSEndpoints, MicroCMSRelation } from './types';
+import type { MicroCMSEndpoints, MicroCMSRelation } from './types';
 
 // NOTE: Depth 1 only
 export type ResolveQueryFieldsRelation<T, C> = {

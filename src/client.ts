@@ -1,16 +1,16 @@
 import {
   createClient as _createClient,
-  MicroCMSClient as MicroCMSClientParams,
+  type MicroCMSClient as MicroCMSClientParams,
 } from 'microcms-js-sdk';
-import { MicroCMSEndpoints } from './types';
-import {
+import type { MicroCMSEndpoints } from './types';
+import type {
   GetAllContentIdsRequest,
   GetAllContentRequest,
   GetListDetailRequest,
   GetListRequest,
   GetObjectRequest,
 } from './request';
-import {
+import type {
   GetAllContentResponse,
   GetDetailResponse,
   GetListResponse,
