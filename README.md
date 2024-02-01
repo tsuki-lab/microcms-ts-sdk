@@ -5,6 +5,17 @@ This package is a wrapper for "microcms-js-sdk". More **TYPE SAFE**. 🛡️
 [![npm version](https://badge.fury.io/js/microcms-ts-sdk.svg)](https://badge.fury.io/js/microcms-ts-sdk)
 [![License](https://img.shields.io/badge/License-Apache_2.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 
+## Supported type safe methods.
+- 🛡️ `.getList()`
+- 🛡️ `.getListDetail()`
+- 🛡️ `.getObject()`
+- 🛡️ `.getAllContentIds()`
+- 🛡️ `.getAllContents()`
+- 🛠️ `.create()`
+- 🛠️ `.update()`
+- 🛠️ `.delete()`
+- 🛠️ `.get()`
+
 ## Getting Started
 
 ### install
@@ -126,20 +137,6 @@ client.getList({
 //   limit: number;
 //   offset: number;
 // }
-```
-
-### Support request types.
-
-```ts
-// create response type
-client.create({
-  endpoint: 'posts'
-  content: {
-    text: 'text',
-    category: 'CATEGORY_CONTENT_ID'
-    relatedArticles: ['CONTENTS_ID', 'CONTENTS_ID']
-  }
-});
 ```
 
 ## LICENSE

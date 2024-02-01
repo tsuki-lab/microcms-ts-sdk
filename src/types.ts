@@ -1,15 +1,14 @@
-import { MicroCMSListContent, MicroCMSListResponse, MicroCMSObjectContent } from 'microcms-js-sdk';
-
-/** ListAPI Endpoint Type */
-export type MicroCMSListAPI<T> = MicroCMSListResponse<T>;
-
-/** ObjectAPI Endpoint Type */
-export type MicroCMSObjectAPI<T> = T & MicroCMSObjectContent;
+import { MicroCMSListContent } from 'microcms-js-sdk';
 
 /** Relation Type */
 export type MicroCMSRelation<T> = T & MicroCMSListContent;
 
 /** Endpoints Type */
 export type MicroCMSEndpoints = {
-  [key: string]: MicroCMSListAPI<any> | MicroCMSObjectAPI<any>;
+  list: {
+    [key: string]: any;
+  }
+  object: {
+    [key: string]: any;
+  }
 };

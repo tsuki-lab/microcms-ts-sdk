@@ -1,18 +1,14 @@
 import {
   createClient as _createClient,
-  MicroCMSClient,
-  WriteApiRequestResult
+  MicroCMSClient as MicroCMSClientParams,
 } from 'microcms-js-sdk';
 import { MicroCMSEndpoints } from './types';
 import {
-  CreateRequest,
-  DeleteRequest,
   GetAllContentIdsRequest,
   GetAllContentRequest,
   GetListDetailRequest,
   GetListRequest,
   GetObjectRequest,
-  UpdateRequest
 } from './request';
 import {
   GetAllContentResponse,
@@ -27,12 +23,7 @@ import {
 // /////////////////////////////////
 // /////////////////////////////////
 
-/**
- * Initialize SDK Client
- */
-export const createClient = <T extends MicroCMSEndpoints>(
-  params: MicroCMSClient
-): {
+type CustomResponseType<T extends MicroCMSEndpoints> = {
   getList<R extends GetListRequest<T>>(request: R): Promise<GetListResponse<T, R>>;
   getListDetail<R extends GetListDetailRequest<T>>(request: R): Promise<GetDetailResponse<T, R>>;
   getObject<R extends GetObjectRequest<T>>(request: R): Promise<GetObjectResponse<T, R>>;
@@ -40,7 +31,13 @@ export const createClient = <T extends MicroCMSEndpoints>(
   getAllContents<R extends GetAllContentRequest<T>>(
     request: R
   ): Promise<GetAllContentResponse<T, R>>;
-  create<R extends CreateRequest<T>>(request: R): Promise<WriteApiRequestResult>;
-  update<R extends UpdateRequest<T>>(request: R): Promise<WriteApiRequestResult>;
-  delete<R extends DeleteRequest<T>>(request: R): Promise<void>;
-} => _createClient(params);
+}
+
+export type MicroCMSClient<T extends MicroCMSEndpoints> = CustomResponseType<T> & Omit<ReturnType<typeof _createClient>, keyof CustomResponseType<T>>
+
+/**
+ * Initialize SDK Client
+ */
+export const createClient = <T extends MicroCMSEndpoints>(
+  params: MicroCMSClientParams
+): MicroCMSClient<T> => _createClient(params);

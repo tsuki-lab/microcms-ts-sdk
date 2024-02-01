@@ -1,5 +1,5 @@
 /* eslint-disable no-unused-vars */
-import { MicroCMSListAPI, MicroCMSObjectAPI, MicroCMSRelation, createClient } from '../src';
+import { MicroCMSRelation, createClient } from '../src';
 
 type Post = {
   text: string;
@@ -8,10 +8,14 @@ type Post = {
 };
 
 type Endpoints = {
-  posts: MicroCMSListAPI<Post>;
-  pickup: MicroCMSObjectAPI<{
-    articles: MicroCMSRelation<Post>[];
-  }>;
+  list: {
+    posts: Post;
+  }
+  object: {
+    pickup: {
+      articles: MicroCMSRelation<Post>[];
+    };
+  }
 };
 
 const client = createClient<Endpoints>({
@@ -123,16 +127,11 @@ const client = createClient<Endpoints>({
       fields: ['id', 'text', 'publishedAt']
     }
   });
-  type GetAllResult = typeof getAllResult;
+  type GetAllResult = (typeof getAllResult)[number];
   //   ^?
 
-  const getAllResult2 = await client.getAllContents({
+  const getAllIdResult = await client.getAllContentIds({
     endpoint: 'posts',
-    queries: {
-      fields: ['id', 'text', 'publishedAt'],
-      limit: 10
-    }
+    alternateField: 'text'
   });
-  type GetAllResult2 = typeof getAllResult2;
-  //   ^?
 })();

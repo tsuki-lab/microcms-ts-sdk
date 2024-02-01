@@ -6,9 +6,9 @@ import {
 } from 'microcms-js-sdk';
 import { DecrementNum, PickByFields } from './utils';
 import { MicroCMSEndpoints, MicroCMSRelation } from './types';
-import { MicroCMSListAPIPropertiesOnly } from './helper';
 import {
   GetAllContentRequest,
+  GetListDetailRequest,
   GetListRequest,
   GetObjectRequest,
   ResolveQueryFieldsRelation
@@ -38,11 +38,10 @@ type ResolveDepthResponse<R, C> = R extends {
 
 type GetResponse<
   T extends MicroCMSEndpoints,
-  R extends { endpoint: keyof T },
-  C = R['endpoint'] extends keyof MicroCMSListAPIPropertiesOnly<T>
-    ? T[R['endpoint']]['contents'][number]
-    : T[R['endpoint']],
-  M = R['endpoint'] extends keyof MicroCMSListAPIPropertiesOnly<T>
+  I extends keyof T,
+  R extends { endpoint: keyof T[I] },
+  C = T[I][R['endpoint']] & (I extends 'list' ? MicroCMSListContent : MicroCMSObjectContent),
+  M = I extends 'list'
     ? MicroCMSListContent
     : MicroCMSObjectContent
 > = R extends {
@@ -62,12 +61,12 @@ type GetResponse<
 /** .getListDetail() response type */
 export type GetDetailResponse<
   T extends MicroCMSEndpoints,
-  R extends GetListRequest<T>
-> = GetResponse<T, R>;
+  R extends GetListDetailRequest<T>
+> = GetResponse<T, 'list', R>;
 
 /** .getList() response type */
 export type GetListResponse<T extends MicroCMSEndpoints, R extends GetListRequest<T>> = {
-  contents: GetResponse<T, R>[];
+  contents: GetResponse<T, 'list', R>[];
   totalCount: number;
   offset: number;
   limit: number;
@@ -77,10 +76,10 @@ export type GetListResponse<T extends MicroCMSEndpoints, R extends GetListReques
 export type GetObjectResponse<
   T extends MicroCMSEndpoints,
   R extends GetObjectRequest<T>
-> = GetResponse<T, R>;
+> = GetResponse<T, 'object', R>;
 
 /** .getAllContents() response type */
 export type GetAllContentResponse<
   T extends MicroCMSEndpoints,
   R extends GetAllContentRequest<T>
-> = GetResponse<T, R>[];
+> = GetResponse<T, 'list', R>[];
