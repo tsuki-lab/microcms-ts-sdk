@@ -18,6 +18,6 @@ jobs:
       - run: |
           pnpm install --frozen-lockfile
           pnpm build
-          npm publish --access public
+          npm publish --access public --tag next
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_AUTH_TOKEN }}
