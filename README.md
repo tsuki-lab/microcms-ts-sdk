@@ -142,43 +142,6 @@ client.create({
 });
 ```
 
-### v0.7.0 Legacy support
-
-```ts
-import { createClient } from 'microcms-ts-sdk/legacy';
-
-type Category = {
-  slug: string;
-  name: string;
-};
-
-type Post = {
-  text: string;
-  category: MicroCMSRelation<Category>;
-  relatedArticles: MicroCMSRelation<Post>[];
-};
-
-type Endpoints = {
-  // List API
-  list: {
-    posts: Post;
-    categories: Category;
-  };
-  // Object API
-  object: {
-    pickup: MicroCMSObjectAPI<{
-      articles: MicroCMSRelation<Post>[];
-    }>;
-  };
-};
-
-// Initialize Client SDK.
-const client = crateClient<Endpoints>({
-  serviceDomain: 'YOUR_DOMAIN',
-  apiKey: 'YOUR_API_KEY'
-});
-```
-
 ## LICENSE
 
 Apache-2.0
