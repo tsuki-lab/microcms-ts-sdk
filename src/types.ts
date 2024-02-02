@@ -13,7 +13,7 @@ import type {
   DeleteRequest as _DeleteRequest,
   GetAllContentIdsRequest as _GetAllContentIdsRequest
 } from 'microcms-js-sdk';
-import type { DecrementNum } from './type-utils';
+import type { DecrementNum, PickByFields } from './type-utils';
 import { createClient } from './client';
 
 export type ClientEndPoints = {
@@ -30,16 +30,16 @@ export type MicroCMSRelation<T> = T & MicroCMSListContent;
 
 // default depth = 1
 // https://document.microcms.io/content-api/get-list-contents#h30fce9c966
-type ResolveDepthResponse<T, D extends number = 1> = MicroCMSListContent & {
+type ResolveDepthResponse<T, D extends number = 1> = {
   [K in keyof T]: T[K] extends infer Prop
     ? Prop extends MicroCMSRelation<infer R>
       ? D extends 0
         ? MicroCMSContentId
-        : ResolveDepthResponse<NonNullable<R>, DecrementNum<D>>
+        : ResolveDepthResponse<NonNullable<MicroCMSRelation<R>>, DecrementNum<D>>
       : Prop extends MicroCMSRelation<infer R>[]
         ? D extends 0
           ? MicroCMSContentId[]
-          : ResolveDepthResponse<NonNullable<R>, DecrementNum<D>>[]
+          : ResolveDepthResponse<NonNullable<MicroCMSRelation<R>>, DecrementNum<D>>[]
         : Prop
     : never;
 };
@@ -56,13 +56,13 @@ type ResolveContentType<
   T extends ClientEndPoints,
   I extends keyof ClientEndPoints,
   R extends { endpoint: keyof T[I] },
-  C = T[I][R['endpoint']] & (I extends 'list' ? MicroCMSListContent : MicroCMSObjectContent)
+  C = T[I][R['endpoint']] & (I extends 'list' ? MicroCMSListContent : MicroCMSObjectContent) & { [key: string]: unknown }
 > = R extends {
   queries: {
     fields: (infer F extends keyof C)[];
   };
 }
-  ? ResolveDepthQuery<R, Pick<C, F>>
+  ? ResolveDepthQuery<R, PickByFields<C, F>>
   : ResolveDepthQuery<R, C>;
 
 type ResolveUpsertRelation<T> = {
@@ -81,7 +81,7 @@ export interface MicroCMSGetListDetailQueries<E>
     MicroCMSQueries,
     'fields' | 'limit' | 'offset' | 'orders' | 'q' | 'ids' | 'filters'
   > {
-  fields?: Extract<keyof E | keyof MicroCMSListContent, string>[];
+  fields?: Extract<keyof E | keyof MicroCMSListContent, string>[] | string[];
 }
 
 /** getListDetail request type */
@@ -99,7 +99,7 @@ export type MicroCMSGetListDetailResponse<
 
 /** getList queries type */
 export interface MicroCMSGetListQueries<E> extends MicroCMSQueries {
-  fields?: Extract<keyof E | keyof MicroCMSListContent, string>[];
+  fields?: Extract<keyof E | keyof MicroCMSListContent, string>[] | string[];
 }
 
 /** getList request type */
@@ -122,7 +122,7 @@ export interface MicroCMSGetObjectQueries<E>
     MicroCMSQueries,
     'fields' | 'limit' | 'offset' | 'orders' | 'q' | 'ids' | 'filters'
   > {
-  fields?: Extract<keyof E | keyof MicroCMSObjectContent, string>[];
+  fields?: Extract<keyof E | keyof MicroCMSObjectContent, string>[] | string[];
 }
 
 /** getObject queries type */
