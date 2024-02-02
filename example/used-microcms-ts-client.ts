@@ -10,12 +10,12 @@ type Post = {
 type Endpoints = {
   list: {
     posts: Post;
-  }
+  };
   object: {
     pickup: {
       articles: MicroCMSRelation<Post>[];
     };
-  }
+  };
 };
 
 const client = createClient<Endpoints>({

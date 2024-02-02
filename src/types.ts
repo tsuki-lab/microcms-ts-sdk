@@ -7,8 +7,8 @@ export type MicroCMSRelation<T> = T & MicroCMSListContent;
 export type MicroCMSEndpoints = {
   list: {
     [key: string]: any;
-  }
+  };
   object: {
     [key: string]: any;
-  }
+  };
 };

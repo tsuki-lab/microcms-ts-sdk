@@ -4,9 +4,6 @@ import type {
   GetObjectRequest as _GetObjectRequest,
   GetAllContentIdsRequest as _GetAllContentIdsRequest,
   GetAllContentRequest as _GetAllContentRequest,
-  CreateRequest as _CreateRequest,
-  UpdateRequest as _UpdateRequest,
-  DeleteRequest as _DeleteRequest,
   MicroCMSQueries as _MicroCMSQueries,
   MicroCMSListContent,
   MicroCMSObjectContent
@@ -19,8 +16,8 @@ export type ResolveQueryFieldsRelation<T, C> = {
     ? Prop extends MicroCMSRelation<infer U>
       ? `${Extract<K, string>}.${Extract<keyof U | keyof C, string>}` | K
       : Prop extends MicroCMSRelation<infer U>[]
-      ? `${Extract<K, string>}.${Extract<keyof U | keyof C, string>}` | K
-      : K
+        ? `${Extract<K, string>}.${Extract<keyof U | keyof C, string>}` | K
+        : K
     : never;
 }[keyof T];
 
@@ -56,7 +53,10 @@ export interface GetObjectQueries<T>
     _MicroCMSQueries,
     'fields' | 'limit' | 'offset' | 'orders' | 'q' | 'ids' | 'filters'
   > {
-  fields?: Extract<ResolveQueryFieldsRelation<T & MicroCMSObjectContent, MicroCMSObjectContent>, string>[];
+  fields?: Extract<
+    ResolveQueryFieldsRelation<T & MicroCMSObjectContent, MicroCMSObjectContent>,
+    string
+  >[];
 }
 
 /** .getAllContentIds() queries type */

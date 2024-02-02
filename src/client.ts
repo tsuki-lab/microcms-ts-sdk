@@ -1,6 +1,6 @@
 import {
   createClient as _createClient,
-  type MicroCMSClient as MicroCMSClientParams,
+  type MicroCMSClient as MicroCMSClientParams
 } from 'microcms-js-sdk';
 import type { MicroCMSEndpoints } from './types';
 import type {
@@ -8,7 +8,7 @@ import type {
   GetAllContentRequest,
   GetListDetailRequest,
   GetListRequest,
-  GetObjectRequest,
+  GetObjectRequest
 } from './request';
 import type {
   GetAllContentResponse,
@@ -31,9 +31,10 @@ type CustomResponseType<T extends MicroCMSEndpoints> = {
   getAllContents<R extends GetAllContentRequest<T>>(
     request: R
   ): Promise<GetAllContentResponse<T, R>>;
-}
+};
 
-export type MicroCMSClient<T extends MicroCMSEndpoints> = CustomResponseType<T> & Omit<ReturnType<typeof _createClient>, keyof CustomResponseType<T>>
+export type MicroCMSClient<T extends MicroCMSEndpoints> = CustomResponseType<T> &
+  Omit<ReturnType<typeof _createClient>, keyof CustomResponseType<T>>;
 
 /**
  * Initialize SDK Client

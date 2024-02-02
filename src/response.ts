@@ -21,10 +21,10 @@ type ResolveDepthContent<T, D extends number = 1> = {
         ? MicroCMSContentId
         : ResolveDepthContent<NonNullable<R>, DecrementNum<D>> & MicroCMSListContent
       : Prop extends MicroCMSRelation<infer R>[]
-      ? D extends 0
-        ? MicroCMSContentId[]
-        : (ResolveDepthContent<NonNullable<R>, DecrementNum<D>> & MicroCMSListContent)[]
-      : Prop
+        ? D extends 0
+          ? MicroCMSContentId[]
+          : (ResolveDepthContent<NonNullable<R>, DecrementNum<D>> & MicroCMSListContent)[]
+        : Prop
     : never;
 };
 
@@ -41,9 +41,7 @@ type GetResponse<
   I extends keyof T,
   R extends { endpoint: keyof T[I] },
   C = T[I][R['endpoint']] & (I extends 'list' ? MicroCMSListContent : MicroCMSObjectContent),
-  M = I extends 'list'
-    ? MicroCMSListContent
-    : MicroCMSObjectContent
+  M = I extends 'list' ? MicroCMSListContent : MicroCMSObjectContent
 > = R extends {
   queries: {
     fields: (infer F extends Extract<ResolveQueryFieldsRelation<C, M>, string>)[];

@@ -6,6 +6,7 @@ This package is a wrapper for "microcms-js-sdk". More **TYPE SAFE**. 🛡️
 [![License](https://img.shields.io/badge/License-Apache_2.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 
 ## Supported type safe methods.
+
 - 🛡️ `.getList()`
 - 🛡️ `.getListDetail()`
 - 🛡️ `.getObject()`
