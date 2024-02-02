@@ -1,7 +1,8 @@
-import { createClient } from '../src';
+import { MicroCMSRelation, createClient } from '../src';
 
 type Content = {
   text: string;
+  related: MicroCMSRelation<Content>[];
 };
 
 type Endpoints = {
@@ -9,7 +10,9 @@ type Endpoints = {
     contents: Content;
   };
   object: {
-    content: Content;
+    pickup: {
+      pickupContents: MicroCMSRelation<Content>[];
+    };
   };
 };
 
@@ -49,7 +52,7 @@ client
 
 client
   .getObject({
-    endpoint: 'content',
+    endpoint: 'pickup',
     queries: {
       fields: ['text', 'publishedAt']
     }
@@ -60,7 +63,8 @@ client
   .create({
     endpoint: 'contents',
     content: {
-      text: 'dummy'
+      text: 'dummy',
+      related: ['xxxxxx']
     }
   })
   .then((res) => res);
@@ -70,7 +74,8 @@ client
     endpoint: 'contents',
     contentId: 'xxxxxx',
     content: {
-      text: 'dummy'
+      text: 'dummy',
+      related: ['xxxxxx']
     }
   })
   .then((res) => res);
@@ -87,9 +92,9 @@ client
 
 client
   .update({
-    endpoint: 'content',
+    endpoint: 'pickup',
     content: {
-      text: 'dummy'
+      pickupContents: ['xxxxxx']
     }
   })
   .then((res) => res);
