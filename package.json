@@ -18,13 +18,13 @@
     "prettier": "prettier ."
   },
   "dependencies": {
-    "microcms-js-sdk": "^2.7.0"
+    "microcms-js-sdk": "^3.1.0"
   },
   "devDependencies": {
-    "@typescript-eslint/eslint-plugin": "^6.20.0",
-    "@typescript-eslint/parser": "^6.20.0",
-    "esbuild": "^0.20.0",
-    "eslint": "^8.56.0",
+    "@typescript-eslint/eslint-plugin": "^7.5.0",
+    "@typescript-eslint/parser": "^7.5.0",
+    "esbuild": "^0.20.2",
+    "eslint": "^8.57.0",
     "eslint-config-standard": "^17.1.0",
     "eslint-plugin-import": "^2.29.1",
     "eslint-plugin-n": "^16.6.2",
@@ -32,7 +32,7 @@
     "eslint-plugin-promise": "^6.1.1",
     "npm-run-all": "^4.1.5",
     "prettier": "^3.2.5",
-    "typescript": "^5.3.3"
+    "typescript": "^5.4.4"
   },
   "author": "hanetsuki<me@tsuki-lab.net>",
   "license": "Apache-2.0",

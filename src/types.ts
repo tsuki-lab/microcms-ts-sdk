@@ -56,7 +56,8 @@ type ResolveContentType<
   T extends ClientEndPoints,
   I extends keyof ClientEndPoints,
   R extends { endpoint: keyof T[I] },
-  C = T[I][R['endpoint']] & (I extends 'list' ? MicroCMSListContent : MicroCMSObjectContent) & { [key: string]: unknown }
+  C = T[I][R['endpoint']] &
+    (I extends 'list' ? MicroCMSListContent : MicroCMSObjectContent) & { [key: string]: unknown }
 > = R extends {
   queries: {
     fields: (infer F extends keyof C)[];
@@ -206,6 +207,5 @@ export type MicroCMSSchemaInfer<T extends ReturnType<typeof createClient>> = {
   >;
 };
 
-export type MicroCMSDepthInfer<T, D extends number> = T extends ResolveDepthResponse<infer U>
-  ? ResolveDepthResponse<U, D>
-  : ResolveDepthResponse<T, D>;
+export type MicroCMSDepthInfer<T, D extends number> =
+  T extends ResolveDepthResponse<infer U> ? ResolveDepthResponse<U, D> : ResolveDepthResponse<T, D>;
