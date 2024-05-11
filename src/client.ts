@@ -24,7 +24,7 @@ export const createClient = <T extends ClientEndPoints>(
 
       if (data.offset + data?.limit >= data.totalCount) return data;
 
-      const result = await handler(data.limit, data.offset + data.limit);
+      const result = await handler(data.offset + data.limit, data.limit);
 
       return {
         offset: 0,
