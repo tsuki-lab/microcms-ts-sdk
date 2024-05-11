@@ -59,7 +59,7 @@ export interface GetObjectQueries<T>
   >[];
 }
 
-/** .getAllContentIds() queries type */
+/** .getAllContentIds() and .getAllContents() queries type */
 export interface GetAllContentQueries<T>
   extends Omit<_MicroCMSQueries, 'limit' | 'offset' | 'ids'> {
   fields?: Extract<
