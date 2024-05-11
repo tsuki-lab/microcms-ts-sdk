@@ -11,7 +11,8 @@ import type {
   CreateRequest as _CreateRequest,
   UpdateRequest as _UpdateRequest,
   DeleteRequest as _DeleteRequest,
-  GetAllContentIdsRequest as _GetAllContentIdsRequest
+  GetAllContentIdsRequest as _GetAllContentIdsRequest,
+  GetAllContentRequest as _GetAllContentRequest
 } from 'microcms-js-sdk';
 import type { DecrementNum, PickByFields } from './type-utils';
 import { createClient } from './client';
@@ -138,10 +139,16 @@ export type MicroCMSGetObjectResponse<
   R extends MicroCMSGetObjectRequest<T>
 > = ResolveContentType<T, 'object', R>;
 
-/** create and update result type */
+/**
+ * create and update result type
+ * @deprecated unsupported future version
+ */
 export type WriteApiRequestResult = _WriteApiRequestResult;
 
-/** create request type */
+/**
+ * create request type
+ * @deprecated unsupported future version
+ */
 export interface CreateRequest<T extends ClientEndPoints>
   extends _CreateRequest<Record<string, any>> {
   endpoint: Extract<keyof T['list'] | keyof T['object'], string>;
@@ -155,23 +162,42 @@ export interface GetAllContentIdsRequest<T extends ClientEndPoints>
   alternateField?: Extract<keyof T['list'][this['endpoint']] | keyof MicroCMSListContent, string>;
 }
 
+export interface GetAllContentRequest<T extends ClientEndPoints> extends _GetAllContentRequest {
+  endpoint: Extract<keyof T['list'], string>;
+  queries?: Omit<MicroCMSGetListQueries<T['list'][this['endpoint']]>, 'limit' | 'offset' | 'ids'>;
+}
+
+/** getAllCContents response type */
+export type GetAllContentResponse<
+  T extends ClientEndPoints,
+  R extends GetAllContentRequest<T>
+> = ResolveContentType<T, 'list', R>[];
+
+/** @deprecated unsupported future version */
 export interface UpdateListRequest<T extends ClientEndPoints> extends _UpdateRequest<unknown> {
   endpoint: Extract<keyof T['list'], string>;
   contentId: string;
   content: Partial<ResolveUpsertRelation<T['list'][this['endpoint']]>>;
 }
 
+/** @deprecated unsupported future version */
 export interface UpdateObjectRequest<T extends ClientEndPoints> extends _UpdateRequest<unknown> {
   endpoint: Extract<keyof T['object'], string>;
   content: Partial<ResolveUpsertRelation<T['object'][this['endpoint']]>>;
 }
 
-/** update request type */
+/**
+ * update request type
+ * @deprecated unsupported future version
+ */
 export type UpdateRequest<T extends ClientEndPoints> =
   | UpdateListRequest<T>
   | UpdateObjectRequest<T>;
 
-/** delete request type */
+/**
+ * delete request type
+ * @deprecated unsupported future version
+ */
 export interface DeleteRequest<T extends ClientEndPoints> extends _DeleteRequest {
   endpoint: Extract<keyof T['list'] | keyof T['object'], string>;
 }
@@ -188,6 +214,9 @@ export interface MicroCMSClient<T extends ClientEndPoints> {
   update<R extends UpdateRequest<T>>(request: R): Promise<WriteApiRequestResult>;
   delete<R extends DeleteRequest<T>>(request: R): Promise<void>;
   getAllContentIds<R extends GetAllContentIdsRequest<T>>(request: R): Promise<string[]>;
+  getAllContents<R extends GetAllContentRequest<T>>(
+    request: R
+  ): Promise<GetAllContentResponse<T, R>>;
 }
 
 export interface MicroCMSTsClient<T extends ClientEndPoints> extends MicroCMSClient<T> {
@@ -195,6 +224,9 @@ export interface MicroCMSTsClient<T extends ClientEndPoints> extends MicroCMSCli
 }
 type ExceptEndpoints<T> = T extends MicroCMSTsClient<infer U> ? U : unknown;
 
+/**
+ * @deprecated unsupported future version
+ */
 export type MicroCMSSchemaInfer<T extends ReturnType<typeof createClient>> = {
   [K in Parameters<T['getList']>[0]['endpoint']]: MicroCMSGetListDetailResponse<
     ExceptEndpoints<T>,
@@ -207,5 +239,8 @@ export type MicroCMSSchemaInfer<T extends ReturnType<typeof createClient>> = {
   >;
 };
 
+/**
+ * @deprecated unsupported future version
+ */
 export type MicroCMSDepthInfer<T, D extends number> =
   T extends ResolveDepthResponse<infer U> ? ResolveDepthResponse<U, D> : ResolveDepthResponse<T, D>;

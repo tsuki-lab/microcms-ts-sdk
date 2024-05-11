@@ -60,6 +60,12 @@ client
   .then((res) => res);
 
 client
+  .getAllContents({
+    endpoint: 'contents'
+  })
+  .then((res) => res[0]);
+
+client
   .create({
     endpoint: 'contents',
     content: {

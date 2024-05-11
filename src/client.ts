@@ -13,6 +13,10 @@ export const createClient = <T extends ClientEndPoints>(
   clientArg: MicroCMSClientParams
 ): MicroCMSTsClient<T> => ({
   ...createClientOrigin(clientArg),
+  /**
+   * Get all contents
+   * @deprecated Use `getAllContents` instead
+   */
   getAll<R extends MicroCMSGetListRequest<T>>(request: R) {
     const LIMIT = 100;
     const handler = async (offset = 0, limit = LIMIT): Promise<MicroCMSGetListResponse<T, R>> => {
