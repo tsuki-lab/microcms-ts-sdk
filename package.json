@@ -18,7 +18,7 @@
     "prettier": "prettier ."
   },
   "dependencies": {
-    "microcms-js-sdk": "^3.1.1"
+    "microcms-js-sdk": "^3.1.2"
   },
   "devDependencies": {
     "@typescript-eslint/eslint-plugin": "^7.8.0",
