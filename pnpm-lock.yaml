@@ -9,8 +9,8 @@ importers:
   .:
     dependencies:
       microcms-js-sdk:
-        specifier: ^3.1.1
-        version: 3.1.1
+        specifier: ^3.2.0
+        version: 3.2.0
     devDependencies:
       '@typescript-eslint/eslint-plugin':
         specifier: ^7.8.0
@@ -620,6 +620,7 @@ packages:
   eslint@8.57.0:
     resolution: {integrity: sha512-dZ6+mexnaTIbSBZWgou51U6OmzIhYM2VcNdtiTtI7qPNZm35Akpr0f6vtw3w1Kmn5PYo+tZVfh13WrhpS6oLqQ==}
     engines: {node: ^12.22.0 || ^14.17.0 || >=16.0.0}
+    deprecated: This version is no longer supported. Please see https://eslint.org/version-support for other options.
     hasBin: true
 
   espree@9.6.1:
@@ -932,8 +933,8 @@ packages:
     resolution: {integrity: sha512-8q7VEgMJW4J8tcfVPy8g09NcQwZdbwFEqhe/WZkoIzjn/3TGDwtOCYtXGxA3O8tPzpczCCDgv+P2P5y00ZJOOg==}
     engines: {node: '>= 8'}
 
-  microcms-js-sdk@3.1.1:
-    resolution: {integrity: sha512-Lh234f+r4dje/1XxWNu4sMrjCrqkMkRoc9wr/WN5wsEngTa0ZLMXLNgZm3e74vw/HHj3ipYSJeCA2HyyguN37w==}
+  microcms-js-sdk@3.2.0:
+    resolution: {integrity: sha512-08TyGuBg3oBU27CUT0rn7GDgLu58pZ9F3aBpAa5boJJsllkz9BosLWsqOM9dfGTcVOga+/9tMtwHtmq17MK2KQ==}
     engines: {node: '>=18.0.0'}
 
   micromatch@4.0.5:
@@ -2286,7 +2287,7 @@ snapshots:
 
   merge2@1.4.1: {}
 
-  microcms-js-sdk@3.1.1:
+  microcms-js-sdk@3.2.0:
     dependencies:
       async-retry: 1.3.3
 
